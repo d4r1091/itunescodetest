@@ -65,6 +65,7 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
     [self configureView];
+    // TODO: in ipad, create a kind o "placeholder view" that replace actual
 }
 
 - (void)didReceiveMemoryWarning {
