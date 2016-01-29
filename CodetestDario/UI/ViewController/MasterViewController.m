@@ -109,22 +109,27 @@
     // TODO: probably there is a more efficient way to show an indicator view, but this is more quickly
     [self.activityIndicator startAnimating];
     [self.tableView reloadData];
+    
+    // FEEDBACK from UKCompany
+    // Use of ‘self’ within blocks captures self and causes a retain cycle
+    // USE __block for ever
+    
+    __block MasterViewController *_self = self;
+    
     [[NetworkManager sharedManager] getItunesMatchedResultsWithQueryString:searchedSentence
                                                        andComplentionBlock:^(NSArray *foundResults, NSError *error) {
-                                                           
                                                            if (error) {
                                                                dispatch_async(dispatch_get_main_queue(), ^{
-                                                                   [self reloadTableAndStopActivityIndicator];
+                                                                   [_self reloadTableAndStopActivityIndicator];
                                                                    [[Utils sharedUtils] showGenericAlertWithMessage:[error localizedDescription]
-                                                                                                   inViewController:self];
+                                                                                                   inViewController:_self];
                                                                });
                                                            } else {
                                                                // show results
-                                                               [self fillItemsWithResults:foundResults];
+                                                               [_self fillItemsWithResults:foundResults];
                                                                dispatch_async(dispatch_get_main_queue(), ^{
-                                                                   [self reloadTableAndStopActivityIndicator];
+                                                                   [_self reloadTableAndStopActivityIndicator];
                                                                });
-                                                               
                                                            }
                                                            
                                                        }];
@@ -138,8 +143,8 @@
 
 - (void)fillItemsWithResults:(NSArray *)results {
     // TODO: probably would be better to port into UI Layer only the array with suggested/required info's like: artistName, trackName, thumbUrl. BUT if I want to add a new info into my "SearchItem model", I'll only add a new property, without changing the way I raise-up items. Could be decided at production time ;)
-    self.objects = [NSMutableArray array];
     
+    self.objects = [NSMutableArray array];
     for (NSDictionary *aRawItem in results) {
         SearchItem *anItem = [[SearchItem alloc] initWithDictionary:aRawItem];
         [self.objects addObject:anItem];

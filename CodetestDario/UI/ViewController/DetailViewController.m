@@ -51,11 +51,17 @@
     if ([item.imageCache objectForKey:item.thumbnailUrlString]) {
         self.thumbnail.image = [item.imageCache objectForKey:item.thumbnailUrlString];
     } else {
+        
+        // FEEDBACK from UKCompany
+        // Use of ‘self’ within blocks captures self and causes a retain cycle
+        // USE __block for ever
+
+        __block DetailViewController *_self = self;
         [[NetworkManager sharedManager] loadImageWithUrl:item.thumbnailUrlString
                                      andComplentionBlock:^(NSData *imageData) {
                                          // show downloaded image
                                          if (imageData) {
-                                             self.thumbnail.image = [UIImage imageWithData:imageData];
+                                             _self.thumbnail.image = [UIImage imageWithData:imageData];
                                          }
         }];
     }

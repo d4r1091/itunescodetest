@@ -27,17 +27,17 @@
 
 - (void)testDownloadFromItunes {
     // TODO: check again why fails, probably some expectation settings
-//    XCTestExpectation *expectation = [self expectationWithDescription:@"getItunesMatchedResults"];
-//    
-//    [[NetworkManager sharedManager] getItunesMatchedResultsWithQueryString:@"Frank%2BSinatra"
-//                                                       andComplentionBlock:^(NSArray *foundResults, NSError *error) {
-//                                                           if (!error) {
-//                                                               [expectation fulfill];
-//                                                           } else {
-//                                                               XCTFail(@"Failure");
-//                                                               [expectation fulfill];
-//                                                           }
-//                                                       }];
+    XCTestExpectation *expectation = [self expectationWithDescription:@"getItunesMatchedResults"];
+    
+    [[NetworkManager sharedManager] getItunesMatchedResultsWithQueryString:@"Frank%2BSinatra"
+                                                       andComplentionBlock:^(NSArray *foundResults, NSError *error) {
+                                                           if (!error) {
+                                                               [expectation fulfill];
+                                                           } else {
+                                                               XCTFail(@"Failure");
+                                                               [expectation fulfill];
+                                                           }
+                                                       }];
 }
 
 - (void)testPerformanceExample {
