@@ -57,6 +57,8 @@
                                   delegate:nil
                              delegateQueue:operationQueue];
     
+    __block NetworkManager *_self = self;
+    
     NSURLSessionDataTask *task = [session dataTaskWithRequest:request
                                             completionHandler:^(NSData * _Nullable data,
                                                                 NSURLResponse * _Nullable response,
@@ -70,7 +72,10 @@
                                                     if (jsonError) {
                                                         complentionBlock (nil, jsonError);
                                                     } else {
-                                                        [self performSelectorInBackground:@selector(parseItunesResultWithArrayOfDictionaries:) withObject:responseDictionary[kiTunesRootJson]];
+                                                        // FEEDBACK from UKCompany
+                                                        // Calling methods on further background threads when it’s already on a background thread in the NSURLSessionDataTask is unneeded.
+                                                        // [self performSelectorInBackground:@selector(parseItunesResultWithArrayOfDictionaries:) withObject:responseDictionary[kiTunesRootJson]];
+                                                        [_self parseItunesResultWithArrayOfDictionaries:responseDictionary[kiTunesRootJson]];
                                                     }
                                                 } else {
                                                     complentionBlock (nil, error);
